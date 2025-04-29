@@ -1,5 +1,4 @@
-# Modification et fignolage
-
+# ta grosse mere la pute
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -67,12 +66,14 @@ try:
 
     # Ajout des ronds rouges pour les candidatures spontanées
     for i, date in enumerate(all_dates):
-        if spontaneous_counts[date] > 0:
-            # Position des ronds rouges
-            bottom = personalized_counts[date]
-            for _ in range(int(spontaneous_counts[date])):
-                plt.scatter(date, bottom + 0.5, color='red', s=50, zorder=3)  # Rond rouge
-                bottom += 1
+        # Ajout des ronds rouges pour les candidatures spontanées avec lettre personnalisée
+        bottom = personalized_counts[date]
+        for _ in range(int(spontaneous_counts[date])):
+            if date in personalized_counts and personalized_counts[date] > 0:
+                plt.scatter(date, bottom + 0.5, color='red', s=50, zorder=3)  # Rond rouge sur vert
+            else:
+                plt.scatter(date, bottom + 0.5, color='red', s=50, zorder=3)  # Rond rouge sur bleu
+            bottom += 1
 
     # Titre et labels
     plt.title("Nombre de CV envoyés par jour")
