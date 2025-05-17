@@ -1,4 +1,4 @@
-# ta grosse mere la pute
+
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -21,8 +21,7 @@ try:
     if "Date de candidature envoye?" not in df.columns or "Envois?" not in df.columns or "Poste?" not in df.columns:
         raise ValueError("Les colonnes 'Date de candidature envoye?', 'Envois?' ou 'Poste?' sont absentes du fichier Excel.")
 
-    # Afficher les valeurs uniques dans la colonne 'Poste?' pour vérification
-    print("Valeurs dans la colonne 'Poste?' :", df["Poste?"].unique())
+
 
     # Nettoyer les valeurs de la colonne 'Poste?'
     df["Poste?"] = df["Poste?"].str.strip().str.lower()
@@ -47,6 +46,8 @@ try:
     # Comptage des candidatures spontanées
     spontaneous_counts = df[df["Poste?"].str.contains("spontan", na=False)].groupby("Date de candidature envoye?").size()
 
+
+
     # Générer une plage de dates complète
     start_date = pd.Timestamp("2025-04-01")
     end_date = daily_counts.index.max()
@@ -60,9 +61,15 @@ try:
     # Création du graphique
     plt.figure(figsize=(10, 6))
 
-    # Barres empilées : vert pour les lettres personnalisées, bleu pour les autres
+    #comptage des candidature en entretien
+    entretien_counts = df[df["Envois?"].str.strip().str.lower()=="candidature en entretien"].groupby("Date de candidature envoye?").size()
+    entretien_counts = entretien_counts.reindex(all_dates, fill_value = 0)
+    plt.figure(figsize=(10, 6))
+
+    # Barres empilées : vert pour les lettres personnalisées, bleu pour les autres, rouge pour les candidatures en entretien
     plt.bar(daily_counts.index, personalized_counts, color='green', label='Lettre personnalisée')
-    plt.bar(daily_counts.index, daily_counts - personalized_counts, bottom=personalized_counts, color='blue', label='Autres')
+    plt.bar(daily_counts.index, daily_counts - personalized_counts - entretien_counts, bottom=personalized_counts, color='blue', label='Autres')
+    plt.bar(daily_counts.index, entretien_counts, bottom=personalized_counts + (daily_counts - personalized_counts - entretien_counts), color='red', label='Candidature en entretien')
 
     # Ajout des ronds rouges pour les candidatures spontanées
     for i, date in enumerate(all_dates):
