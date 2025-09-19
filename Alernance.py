@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 
 # Chemin vers le fichier Excel
-file_path = r"C:\Users\Utilisateur\Documents\autre titi\Alternances.xlsx"
+file_path = r"Alternances.xlsx"
 
 # Lecture du fichier Excel
 try:
